@@ -52,15 +52,20 @@ const less = (safe: string, strategy: string, amount: BigNumber) => {
 };
 
 /** Deposit / Withdraw  **/
-export type DepositAndWithdrawArgs = any[];
-const deposit = (safe: string, strategy: string, amount: BigNumber) => {
-  const boostArgs: DepositAndWithdrawArgs = [safe, strategy, amount];
-  return encodeRouterCall(ITurboRouter, "boost", boostArgs);
+export type DepositAndWithdrawArgs = [
+  safe: string,
+  to: string,
+  amount: BigNumber,
+  minSharesOut: BigNumber
+];
+const deposit = (safe: string, to: string, amount: BigNumber) => {
+  const depositArgs: DepositAndWithdrawArgs = [safe, to, amount, amount];
+  return encodeRouterCall(ITurboRouter, "deposit", depositArgs);
 };
 
-const withdraw = (safe: string, strategy: string, amount: BigNumber) => {
-  const boostArgs: DepositAndWithdrawArgs = [safe, strategy, amount];
-  return encodeRouterCall(ITurboRouter, "less", boostArgs);
+const withdraw = (safe: string, to: string, amount: BigNumber) => {
+  const depositArgs: DepositAndWithdrawArgs = [safe, to, amount, amount];
+  return encodeRouterCall(ITurboRouter, "withdraw", depositArgs);
 };
 
 /** Slurp / Sweep  **/

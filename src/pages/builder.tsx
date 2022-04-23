@@ -8,13 +8,24 @@ import {
   Button,
 } from "@chakra-ui/react";
 import Card from "components/BuildCard/Card";
-import { TurboProvider } from "context/TurboContext";
-import { callRouterWithMultiCall } from "lib/turbo/utils/turboMulticall";
+import { useRari } from "context/RariContext";
+import { TurboProvider, useTurbo } from "context/TurboContext";
+import { TurboAddresses } from "lib/turbo/utils/constants";
+import { checkAllowanceAndApprove, MAX_APPROVAL_AMOUNT } from "lib/turbo/utils/erc20Utils";
+import { ITurboRouter } from "lib/turbo/utils/turboContracts";
+import {
+  callRouterWithMultiCall,
+  decodeRouterCall,
+  sendRouterWithMultiCall,
+} from "lib/turbo/utils/turboMulticall";
 import { useState } from "react";
 import { SafeAction, SafeActionType } from "utils/turboBuilder";
 import { getProvider } from "utils/web3Utils";
+import { useProvider } from "wagmi";
 
 const Builder = () => {
+  const { provider, address } = useRari();
+
   const [array, setArray] = useState<SafeAction[]>([]);
 
   const updateArray = (item: SafeAction) => {
@@ -34,12 +45,32 @@ const Builder = () => {
   };
 
   const handleExecute = async () => {
-    const provider = getProvider();
+    const pullTokens = array.find(
+      (item) => item.type === SafeActionType.PULL_TOKEN
+    );
+
     const encodedCalls = array
       .map((item) => item.callData)
       .filter((callData) => !!callData);
-    console.log({ encodedCalls, array });
-    const result = await callRouterWithMultiCall(provider, encodedCalls, 1);
+
+    // if (!!pullTokens) {
+    //   const tx = await checkAllowanceAndApprove(
+    //     await provider.getSigner(),
+    //     address,
+    //     TurboAddresses[1].ROUTER,
+    //     "0x0ab87046fbb341d058f17cbc4c1133f25a20a52f", //gOHM
+    //     MAX_APPROVAL_AMOUNT
+    //   );
+
+    //   await tx?.wait(1)
+    // }
+
+    const tx = await sendRouterWithMultiCall(
+      await provider.getSigner(),
+      encodedCalls,
+      1
+    );
+    const result = await tx.wait();
     console.log({ result });
   };
 
@@ -47,6 +78,7 @@ const Builder = () => {
     <TurboProvider>
       <VStack h="100vh" w="100%" bg="">
         <Heading>Hi</Heading>
+        <Top />
         {/* Header */}
         <Box w={"100%"} h={10} bg="black"></Box>
         <Stack direction="row" w="100%" h="100%">
@@ -65,6 +97,16 @@ const Builder = () => {
         <Button onClick={handleExecute}>Execute</Button>
       </VStack>
     </TurboProvider>
+  );
+};
+
+const Top: React.FC = () => {
+  const { isUserAuthorized, isRouterAuthorized } = useTurbo();
+  return (
+    <Box>
+      <Text>Is User Authorized: {isUserAuthorized?.toString()} </Text>
+      <Text>Is Router Authorized: {isRouterAuthorized?.toString()} </Text>
+    </Box>
   );
 };
 

@@ -1,5 +1,6 @@
 import { BigNumber, constants } from "ethers";
 import { parseEther } from "ethers/lib/utils";
+import { SafeInfo } from "../fetchers/safes/getSafeInfo";
 
 import { USDPricedTurboSafe } from "../fetchers/safes/getUSDPricedSafeInfo";
 import { getBoostCapForStrategy } from "../fetchers/strategies/getBoostCapsForStrategies";
@@ -17,7 +18,7 @@ export async function fetchMaxSafeAmount(
   provider: any,
   mode: SafeInteractionMode,
   userAddress: string,
-  safe: USDPricedTurboSafe | undefined,
+  safe: USDPricedTurboSafe | SafeInfo | undefined,
   chainId: number,
   strategyIndex?: number,
   limitBorrow?: boolean // Whether we should limit to 75%

@@ -1,14 +1,21 @@
 import { useQuery } from "react-query";
+import { useRari } from "context/RariContext";
+import { createTurboSafe } from "lib/turbo/utils/turboContracts";
 import { getAllSafes } from "lib/turbo/fetchers/safes/getAllSafes";
-import { getProvider } from "utils/web3Utils";
 
 // Trusted Strategies will be independent of any Safe and whitelisted by TRIBE Governance
 export const useAllSafes = (): any => {
-  const { data: safeOwner } = useQuery(`All safes`, async () => {
-    const provider = getProvider();
-    const answer = await getAllSafes(provider, 1);
-    return answer;
-  });
+    const { provider, chainId } = useRari();
 
-  return safeOwner;
+    const { data: safeOwner } = useQuery(
+        `All safes`,
+        async () => {
+            if (!provider || !chainId) return;
+            const answer = await getAllSafes(provider, chainId)
+            console.log(answer)
+            return answer
+        }
+    );
+
+    return safeOwner
 };

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@0xsequence/multicall": "^0.36.11",
+    "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^1.8.8",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
@@ -19,7 +20,8 @@
     "rari-components": "github:Rari-Capital/rari-components#144451807e8673b4586274adfb8e78346ab32fce",
     "react": "18.0.0",
     "react-dom": "18.0.0",
-    "react-query": "^3.38.0"
+    "react-query": "^3.38.0",
+    "wagmi": "^0.2.28"
   },
   "devDependencies": {
     "@types/react": "^18.0.6",
