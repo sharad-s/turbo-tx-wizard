@@ -9,12 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@0xsequence/multicall": "^0.36.11",
+    "@chakra-ui/react": "^1.8.8",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "ethers": "^5.6.4",
+    "framer-motion": "^6",
     "next": "12.1.5",
+    "rari-components": "github:Rari-Capital/rari-components#144451807e8673b4586274adfb8e78346ab32fce",
     "react": "18.0.0",
-    "react-dom": "18.0.0"
+    "react-dom": "18.0.0",
+    "react-query": "^3.38.0"
   },
   "devDependencies": {
+    "@types/react": "^18.0.6",
     "eslint": "8.14.0",
-    "eslint-config-next": "12.1.5"
+    "eslint-config-next": "12.1.5",
+    "typescript": "^4.6.3"
   }
 }
